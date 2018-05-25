@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import boto3
 
-from config import telegram_token
+from config import telegram_token, next_game_date, place
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
+
 
 
 class S3(object):
@@ -19,9 +20,9 @@ class Game(object):
         self.date = date
         self.place = place
 
-    def add_player(self, chat_id):
+    def add_player(self, username):
         s3 = S3()
-        key = 'games/' + self.date + '/' + str(chat_id)
+        key = 'games/' + self.date + '/' + username
         try:
              s3.client.get_object(Bucket='soccer-storage', Key=key)
              message = 'Рад твоему рвению, но записаться можно только один раз.'
@@ -30,9 +31,9 @@ class Game(object):
              message = 'Отлично! Я внёс тебя в состав на игру.'
         return message
 
-    def del_player(self, chat_id):
+    def del_player(self, username):
         s3 = S3()
-        key = 'games/' + self.date + '/' + str(chat_id)
+        key = 'games/' + self.date + '/' + username
         try:
              s3.client.get_object(Bucket='soccer-storage', Key=key)
              s3.client.delete_object(Bucket='soccer-storage', Key=key)
@@ -42,19 +43,24 @@ class Game(object):
         return message
 
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="Здравствуй, товарищ! Меня зовут Лев Яшин. Приглашаю тебя сыграть в футбол в ближайший понедельник в 21:00. Играть будем в зале Изумруд. Жду тебя!")
+    bot.sendMessage(
+        chat_id=update.message.chat_id,
+        text="Здравствуй, товарищ! Меня зовут Лев Яшин. Приглашаю тебя сыграть в футбол " + next_game_date + " в 21:00. Играть будем " + place + ". Жду тебя!"
+    )
 
 
 def add_me(bot, update):
-    game = Game('28.05.2018', 'СК Изумруд')
+    game = Game(next_game_date, place)
     chat_id = update.message.chat_id
-    bot.sendMessage(chat_id=chat_id, text=game.add_player(chat_id))
+    username = update.message.from_user.username
+    bot.sendMessage(chat_id=chat_id, text=game.add_player(username))
 
 
 def del_me(bot, update):
-    game = Game('28.05.2018', 'СК Изумруд')
+    game = Game(next_game_date, place)
     chat_id = update.message.chat_id
-    bot.sendMessage(chat_id=chat_id, text=game.del_player(chat_id))
+    username = update.message.from_user.username
+    bot.sendMessage(chat_id=chat_id, text=game.del_player(username))
 
 
 updater = Updater(token=telegram_token)
