@@ -4,7 +4,7 @@ import logging
 from config import config
 from game import Game
 from telegram.ext import Updater, RegexHandler, CommandHandler
-from telegram import TelegramError, ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup
 
 logging.basicConfig(
     level=logging.DEBUG,
