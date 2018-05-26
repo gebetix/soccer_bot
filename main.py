@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import boto3
 
-from config import telegram_token, next_game_date, place
+from config import telegram_token, next_game_date, place, place_location
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
-
+from telegram import TelegramError
 
 
 class S3(object):
@@ -39,7 +39,7 @@ class Game(object):
              s3.client.delete_object(Bucket='soccer-storage', Key=key)
              message = 'С глубоким сожалением вычёркиваю тебя из состава на игру.'
         except:
-             message = 'Убрать из состава не могу -- тебя в нём и так не было.'
+             message = 'Убрать из состава не могу – тебя в нём и так не было.'
         return message
 
 def start(bot, update):
@@ -63,13 +63,21 @@ def del_me(bot, update):
     bot.sendMessage(chat_id=chat_id, text=game.del_player(username))
 
 
+def location(bot, update):
+    chat_id = update.message.chat_id
+    bot.sendLocation(chat_id=chat_id, latitude=place_location['lat'], longitude=place_location['lon'])
+
+
 updater = Updater(token=telegram_token)
 
 start_handler = CommandHandler('start', start)
 add_me_handler = CommandHandler('add_me', add_me)
 del_me_handler = CommandHandler('del_me', del_me)
+location_handler = CommandHandler('location', location)
 
 updater.dispatcher.add_handler(start_handler)
 updater.dispatcher.add_handler(add_me_handler)
 updater.dispatcher.add_handler(del_me_handler)
+updater.dispatcher.add_handler(location_handler)
+
 updater.start_polling()
