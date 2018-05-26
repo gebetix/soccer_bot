@@ -52,7 +52,7 @@ def main():
         players = game.get_players()
         message = ''
         for i, player in enumerate(players):
-            message += i + '. @' + player + '\n'
+            message += str(i) + '. @' + player + '\n'
         bot.sendMessage(chat_id=chat_id, text=message)
 
     updater = Updater(token=config['token'])
