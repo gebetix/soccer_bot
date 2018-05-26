@@ -48,9 +48,9 @@ def location(bot, update):
 updater = Updater(token=config['token'])
 
 start_handler = CommandHandler('start', start)
-add_me_handler = RegexHandler('^(Записаться)$', add_me, pass_user_data=True)
-del_me_handler = RegexHandler('^(Отменить запись)$', del_me, pass_user_data=True)
-location_handler = RegexHandler('^(Где играем?)$', location, pass_user_data=True)
+add_me_handler = RegexHandler('^Записаться$', add_me, pass_user_data=True)
+del_me_handler = RegexHandler('^Отменить запись$', del_me, pass_user_data=True)
+location_handler = RegexHandler('^Где играем?$', location, pass_user_data=True)
 
 updater.dispatcher.add_handler(start_handler)
 updater.dispatcher.add_handler(add_me_handler)
