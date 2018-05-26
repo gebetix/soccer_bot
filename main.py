@@ -12,14 +12,14 @@ class Game(object):
         self.date = date
         self.place = place
 
-    def add_player(self, username):
+    def add_player(self, username, chat_id):
         s3 = S3()
         key = 'games/' + self.date + '/' + username
         try:
              s3.client.get_object(Bucket='soccer-storage', Key=key)
              message = 'Рад твоему рвению, но записаться можно только один раз.'
         except:
-             s3.client.put_object(Bucket='soccer-storage', Key=key)
+             s3.client.put_object(Bucket='soccer-storage', Key=key, Body=chat_id)
              message = 'Отлично! Я внёс тебя в состав на игру.'
         return message
 
@@ -45,7 +45,7 @@ def add_me(bot, update):
     game = Game(config['next_game_date'], config['place'])
     chat_id = update.message.chat_id
     username = update.message.from_user.username
-    bot.sendMessage(chat_id=chat_id, text=game.add_player(username))
+    bot.sendMessage(chat_id=chat_id, text=game.add_player(username, chat_id))
 
 
 def del_me(bot, update):
