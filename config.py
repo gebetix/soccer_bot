@@ -3,7 +3,6 @@ import json
 
 
 class Config(object):
-
     def __getitem__(self, item):
         s3 = S3()
         data = json.loads(

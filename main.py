@@ -6,8 +6,13 @@ from game import Game
 from telegram.ext import Updater, RegexHandler, CommandHandler
 from telegram import TelegramError, ReplyKeyboardMarkup
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("logs/debug.log"),
+        logging.StreamHandler()
+    ])
 
 
 reply_markup = ReplyKeyboardMarkup([
