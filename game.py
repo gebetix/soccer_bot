@@ -11,7 +11,7 @@ class Game(object):
         players = []
         player_objects = s3.client.list_objects(Bucket='soccer-storage', Prefix=key)['Contents'][1:]
         for obj in player_objects:
-            players.append(split(player_objects['Key'],'/')[-1])
+            players.append(player_objects['Key'].split('/')[-1])
         return players
 
     def add_player(self, username, chat_id):
