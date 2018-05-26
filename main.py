@@ -2,45 +2,27 @@
 import logging
 
 from config import config
-from s3 import S3
+from game import Game
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
-from telegram import TelegramError
+from telegram import TelegramError, ReplyKeyboardMarkup
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-class Game(object):
-    def __init__(self, date, place):
-        self.date = date
-        self.place = place
 
-    def add_player(self, username, chat_id):
-        s3 = S3()
-        key = 'games/' + self.date + '/' + username
-        try:
-             s3.client.get_object(Bucket='soccer-storage', Key=key)
-             message = 'Рад твоему рвению, но записаться можно только один раз.'
-        except:
-             s3.client.put_object(Bucket='soccer-storage', Key=key, Body=str(chat_id))
-             message = 'Отлично! Я внёс тебя в состав на игру.'
-        return message
-
-    def del_player(self, username):
-        s3 = S3()
-        key = 'games/' + self.date + '/' + username
-        try:
-             s3.client.get_object(Bucket='soccer-storage', Key=key)
-             s3.client.delete_object(Bucket='soccer-storage', Key=key)
-             message = 'С глубоким сожалением вычёркиваю тебя из состава на игру.'
-        except:
-             message = 'Убрать из состава не могу – тебя в нём и так не было.'
-        return message
+reply_markup = ReplyKeyboardMarkup([
+        ['Записаться', 'Кто играет?'],
+        ['Отменить запись','Где играем?']
+    ])
 
 def start(bot, update):
     bot.sendMessage(
         chat_id=update.message.chat_id,
-        text="Здравствуй, товарищ! Меня зовут Лев Яшин. Приглашаю тебя сыграть в футбол " + config['next_game_date'] + " в 21:00. Играть будем " + config['place'] + ". Жду тебя!"
+        text="Здравствуй, товарищ! Меня зовут Лев Яшин. Приглашаю тебя сыграть в футбол " + 
+        config['next_game_date'] + " в 21:00. Играть будем " + 
+        config['place'] + ". Жду тебя!",
+        reply_markup=reply_markup
     )
 
 
