@@ -46,17 +46,28 @@ def main():
         place_location = config['place_location']
         bot.sendLocation(chat_id=chat_id, latitude=place_location['lat'], longitude=place_location['lon'])
 
+    def show_players(bot, update):
+        game = Game(config['next_game_date'], config['place'])
+        chat_id = update.message.chat_id
+        players = game.get_players()
+        message = ''
+        for i, player in enumerate(players):
+            message += i + '. @' + player + '\n'
+        bot.sendMessage(chat_id=chat_id, text=message)
+
     updater = Updater(token=config['token'])
 
     start_handler = CommandHandler('start', start)
     add_me_handler = RegexHandler('^Записаться$', add_me)
     del_me_handler = RegexHandler('^Отменить запись$', del_me)
     location_handler = RegexHandler('^Где играем\?$', location)
+    show_players_handler = RegexHandler('^Кто играет\?$', show_players)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(add_me_handler)
     updater.dispatcher.add_handler(del_me_handler)
     updater.dispatcher.add_handler(location_handler)
+    updater.dispatcher.add_handler(show_players_handler)
 
     updater.start_polling()
     updater.idle()
