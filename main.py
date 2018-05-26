@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 
 from config import config
 from s3 import S3
@@ -6,6 +7,8 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram import TelegramError
 
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class Game(object):
     def __init__(self, date, place):
@@ -19,7 +22,7 @@ class Game(object):
              s3.client.get_object(Bucket='soccer-storage', Key=key)
              message = 'Рад твоему рвению, но записаться можно только один раз.'
         except:
-             s3.client.put_object(Bucket='soccer-storage', Key=key, Body=chat_id)
+             s3.client.put_object(Bucket='soccer-storage', Key=key, Body=str(chat_id))
              message = 'Отлично! Я внёс тебя в состав на игру.'
         return message
 
