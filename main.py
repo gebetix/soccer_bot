@@ -50,7 +50,7 @@ updater = Updater(token=config['token'])
 start_handler = CommandHandler('start', start)
 add_me_handler = RegexHandler('^Записаться$', add_me)
 del_me_handler = RegexHandler('^Отменить запись$', del_me)
-location_handler = RegexHandler('^Где играем?$', location)
+location_handler = RegexHandler('^Где играем\?$', location)
 
 updater.dispatcher.add_handler(start_handler)
 updater.dispatcher.add_handler(add_me_handler)
