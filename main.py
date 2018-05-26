@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 reply_markup = ReplyKeyboardMarkup([
-        ['Записаться', 'Кто играет?'],
-        ['Отменить запись','Где играем?']
+        ['Записаться', 'Где играем?'],
+        ['Отменить запись','Кто играет?']
     ])
 
 def start(bot, update):
