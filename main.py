@@ -14,18 +14,31 @@ logging.basicConfig(
     ])
 
 reply_markup = ReplyKeyboardMarkup([
-        ['Записаться', 'Где играем?'],
-        ['Отменить запись','Кто играет?']
+        ['Записаться', 'Отменить запись'],
+        ['Инфо', 'Где играем?', 'Кто играет?']
     ])
 
+game_info = config['next_game_date'] + " в " + config['next_game_time'] ". Играть будем " + config['place'] + "."
+
+invite_msg = "Приглашаю тебя сыграть в футбол " + game_info + "Жду тебя!"
+
+money_info = "Сбер/Рокет/Райф +79090162390"
+
+info_msg = "Следующая игра –– " + game_info + "\nСдать деньги безналом ––" +
+            money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"  
 
 def main():
     def start(bot, update):
         bot.sendMessage(
             chat_id=update.message.chat_id,
-            text="Здравствуй, товарищ! Меня зовут Лев Яшин. Приглашаю тебя сыграть в футбол " + 
-            config['next_game_date'] + " в 21:00. Играть будем " + 
-            config['place'] + ". Жду тебя!",
+            text="Здравствуй, товарищ! Меня зовут Лев Яшин.\n" + invite_msg 
+            reply_markup=reply_markup
+        )
+
+    def info(bot, update):
+        bot.sendMessage(
+            chat_id=update.message.chat_id,
+            text=info_msg,
             reply_markup=reply_markup
         )
 
@@ -62,12 +75,14 @@ def main():
     del_me_handler = RegexHandler('^Отменить запись$', del_me)
     location_handler = RegexHandler('^Где играем\?$', location)
     show_players_handler = RegexHandler('^Кто играет\?$', show_players)
+    info_handler = RegexHandler('^Инфо$', info)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(add_me_handler)
     updater.dispatcher.add_handler(del_me_handler)
     updater.dispatcher.add_handler(location_handler)
     updater.dispatcher.add_handler(show_players_handler)
+    updater.dispatcher.add_handler(info_handler)
 
     updater.start_polling()
     updater.idle()

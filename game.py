@@ -9,7 +9,7 @@ class Game(object):
         s3 = S3()
         key = 'games/' + self.date + '/'
         players = []
-        player_objects = s3.client.list_objects(Bucket='soccer-storage', Prefix=key)['Contents'][1:]
+        player_objects = s3.client.list_objects(Bucket='soccer-storage', Prefix=key)['Contents']
         for obj in player_objects:
             players.append(obj['Key'].split('/')[-1])
         return players
