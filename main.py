@@ -10,7 +10,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("logs/debug.log"),
+        logging.FileHandler("soccer_bot/logs/debug.log"),
     ])
 
 reply_markup = ReplyKeyboardMarkup([
@@ -18,16 +18,15 @@ reply_markup = ReplyKeyboardMarkup([
         ['Где играем?', 'Кто играет?', 'Инфо']
     ])
 
-game_info = config['next_game_date'] + " в " + config['next_game_time'] + ". Играть будем " + config['place'] + "."
-
-invite_msg = "Приглашаю тебя сыграть в футбол " + game_info + "\nЖду тебя!"
-
 money_info = "Сбер/Рокет/Райф +79090162390"
 
-info_msg = "Следующая игра –– " + game_info + "\nСдать деньги безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
+def game_info():
+    return config['next_game_date'] + " в " + config['next_game_time'] + ". Играть будем " + config['place'] + "."
+
 
 def main():
     def start(bot, update):
+        invite_msg = "Приглашаю тебя сыграть в футбол " + game_info() + "\nЖду тебя!"
         bot.sendMessage(
             chat_id=update.message.chat_id,
             text="Здравствуй, товарищ!\nМеня зовут Лев Яшин. " + invite_msg,
@@ -35,6 +34,7 @@ def main():
         )
 
     def info(bot, update):
+        info_msg = "Следующая игра –– " + game_info() + "\nСдать деньги безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
         bot.sendMessage(
             chat_id=update.message.chat_id,
             text=info_msg,
@@ -62,7 +62,7 @@ def main():
         game = Game(config['next_game_date'], config['place'])
         chat_id = update.message.chat_id
         players = game.get_players()
-        message = ''
+        message = '' if players else "Никто пока не записался. Ты будешь первым!"
         for i, player in enumerate(players):
             message += str(i+1) + '. @' + player + '\n'
         bot.sendMessage(chat_id=chat_id, text=message)
