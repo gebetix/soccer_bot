@@ -15,23 +15,22 @@ logging.basicConfig(
 
 reply_markup = ReplyKeyboardMarkup([
         ['Записаться', 'Отменить запись'],
-        ['Инфо', 'Где играем?', 'Кто играет?']
+        ['Где играем?', 'Кто играет?', 'Инфо']
     ])
 
-game_info = config['next_game_date'] + " в " + config['next_game_time'] ". Играть будем " + config['place'] + "."
+game_info = config['next_game_date'] + " в " + config['next_game_time'] + ". Играть будем " + config['place'] + "."
 
-invite_msg = "Приглашаю тебя сыграть в футбол " + game_info + "Жду тебя!"
+invite_msg = "Приглашаю тебя сыграть в футбол " + game_info + "\nЖду тебя!"
 
 money_info = "Сбер/Рокет/Райф +79090162390"
 
-info_msg = "Следующая игра –– " + game_info + "\nСдать деньги безналом ––" +
-            money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"  
+info_msg = "Следующая игра –– " + game_info + "\nСдать деньги безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
 
 def main():
     def start(bot, update):
         bot.sendMessage(
             chat_id=update.message.chat_id,
-            text="Здравствуй, товарищ! Меня зовут Лев Яшин.\n" + invite_msg 
+            text="Здравствуй, товарищ!\nМеня зовут Лев Яшин. " + invite_msg,
             reply_markup=reply_markup
         )
 
