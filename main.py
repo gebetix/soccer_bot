@@ -20,6 +20,8 @@ reply_markup = ReplyKeyboardMarkup([
 
 money_info = "Сбер/Рокет/Райф +79090162390"
 
+max_players_text = "Состав уже укомплектован, но не расстраивайся! Будет следующая игра, а возможно кто-то отпишется от этой."
+
 def game_info():
     return config['next_game_date'] + " в " + config['next_game_time'] + ". Играть будем " + config['place'] + "."
 
@@ -43,6 +45,10 @@ def main():
 
     def add_me(bot, update):
         game = Game(config['next_game_date'], config['place'])
+        players = game.get_players()
+        if len(players) > 10:
+            bot.sendMessage(chat_id=chat_id, text=max_players_text)
+            return
         chat_id = update.message.chat_id
         username = update.message.from_user.username
         bot.sendMessage(chat_id=chat_id, text=game.add_player(username, chat_id))
