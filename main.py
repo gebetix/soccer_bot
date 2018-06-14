@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import datetime
 
 from config import config
 from game import Game
@@ -12,6 +13,8 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler("soccer_bot/logs/debug.log"),
     ])
+
+chat_ids = [20660035, 50813755, 261230537, 66876935, 112089839, 65645431, 121129781]
 
 reply_markup = ReplyKeyboardMarkup([
         ['Записаться', 'Отменить запись'],
@@ -36,7 +39,7 @@ def main():
         )
 
     def info(bot, update):
-        info_msg = "Следующая игра –– " + game_info() + "\nСдать деньги безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
+        info_msg = "Следующая игра –– " + game_info() + "\nСдать 270 рублей безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
         bot.sendMessage(
             chat_id=update.message.chat_id,
             text=info_msg,
@@ -73,7 +76,17 @@ def main():
             message += str(i+1) + '. @' + player + '\n'
         bot.sendMessage(chat_id=chat_id, text=message)
 
+    def push_everyweek(bot, job):
+        for chat_id in chat_ids:
+            bot.sendMessage(
+                chat_id=chat_id,.
+                text="Пора записываться на следуюущую игру!",
+                reply_markup=reply_markup
+            )
+
     updater = Updater(token=config['token'])
+    job_queue = updater.job_queue
+    job_queue.run_daily(push_everyweek, days=(3,), time=datetime.time(13, 00))
 
     start_handler = CommandHandler('start', start)
     add_me_handler = RegexHandler('^Записаться$', add_me)
