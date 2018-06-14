@@ -14,7 +14,7 @@ logging.basicConfig(
         logging.FileHandler("soccer_bot/logs/debug.log"),
     ])
 
-chat_ids = [20660035, 50813755, 261230537, 66876935, 112089839, 65645431, 121129781]
+chat_ids = [20660035, 50813755, 261230537, 66876935, 112089839, 65645431, 121129781, 134120100]
 
 reply_markup = ReplyKeyboardMarkup([
         ['Записаться', 'Отменить запись'],
