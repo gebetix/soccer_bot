@@ -14,8 +14,6 @@ logging.basicConfig(
         logging.FileHandler("soccer_bot/logs/debug.log"),
     ])
 
-chat_ids = [20660035, 50813755, 261230537, 66876935, 112089839, 65645431, 121129781, 134120100]
-
 reply_markup = ReplyKeyboardMarkup([
         ['Записаться', 'Отменить запись'],
         ['Где играем?', 'Кто играет?', 'Инфо']
@@ -77,16 +75,18 @@ def main():
         bot.sendMessage(chat_id=chat_id, text=message)
 
     def push_everyweek(bot, job):
+        chat_ids = job.context
         for chat_id in chat_ids:
             bot.sendMessage(
                 chat_id=chat_id,.
-                text="Пора записываться на следуюущую игру!",
+                text="Пора записываться на следующую игру!",
                 reply_markup=reply_markup
             )
 
     updater = Updater(token=config['token'])
     job_queue = updater.job_queue
-    job_queue.run_daily(push_everyweek, days=(3,), time=datetime.time(13, 00))
+    job_queue.run_daily(push_everyweek, days=(3,), time=datetime.time(13, 00), context=config['yandex_chat_ids'])
+    job_queue.run_daily(push_everyweek, days=(4,), time=datetime.time(13, 00), context=config['outer_chat_ids'])
 
     start_handler = CommandHandler('start', start)
     add_me_handler = RegexHandler('^Записаться$', add_me)
