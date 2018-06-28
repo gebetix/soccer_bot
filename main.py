@@ -12,7 +12,8 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.FileHandler("soccer_bot/logs/debug.log"),
-    ])
+    ]
+)
 
 reply_markup = ReplyKeyboardMarkup([
         ['Записаться', 'Отменить запись'],
@@ -85,8 +86,8 @@ def main():
 
     updater = Updater(token=config['token'])
     job_queue = updater.job_queue
-    job_queue.run_daily(push_everyweek, days=(3,), time=datetime.time(13, 00), context=config['yandex_chat_ids'])
-    job_queue.run_daily(push_everyweek, days=(4,), time=datetime.time(13, 00), context=config['outer_chat_ids'])
+    job_queue.run_daily(push_everyweek, days=(3,), time=datetime.time(13, 00), context=config['yandex_chat_ids'].values())
+    job_queue.run_daily(push_everyweek, days=(4,), time=datetime.time(13, 00), context=config['outer_chat_ids'].values())
 
     start_handler = CommandHandler('start', start)
     add_me_handler = RegexHandler('^Записаться$', add_me)
