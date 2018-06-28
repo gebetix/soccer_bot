@@ -79,7 +79,7 @@ def main():
         chat_ids = job.context
         for chat_id in chat_ids:
             bot.sendMessage(
-                chat_id=chat_id,.
+                chat_id=chat_id,
                 text="Пора записываться на следующую игру!",
                 reply_markup=reply_markup
             )
