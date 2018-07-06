@@ -47,6 +47,7 @@ def main():
 
     def add_me(bot, update):
         game = Game(config['next_game_date'], config['place'])
+        chat_id = update.message.chat_id
         players = game.get_players()
         if len(players) >= 10:
             bot.sendMessage(chat_id=chat_id, text=max_players_text)
