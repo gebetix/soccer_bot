@@ -38,7 +38,7 @@ def main():
         )
 
     def info(bot, update):
-        info_msg = "Следующая игра –– " + game_info() + "\nСдать 270 рублей безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– @gebetix"
+        info_msg = "Следующая игра –– " + game_info() + "\nСдать 270 рублей безналом –– " + money_info + "\n" + "\nЕсли остались вопросы или есть фидбэк –– nickname"
         bot.sendMessage(
             chat_id=update.message.chat_id,
             text=info_msg,
